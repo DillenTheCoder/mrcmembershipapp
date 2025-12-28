@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>View Members</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="container">
+  <h1>Members</h1>
+
+  <input
+    type="text"
+    id="search"
+    placeholder="Search by name, surname, reference or ID..."
+    oninput="renderMembers()"
+  />
+
+  <!-- Scroll container -->
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Surname</th>
+          <th>Reference</th>
+          <th>ID Number</th>
+          <th>Address</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="membersTable"></tbody>
+    </table>
+  </div><br>
+
+  <button class="secondary" onclick="goToAdd()">Add New Member</button>
+</div>
+
+<!-- Long-press popup -->
+<div id="textPopup" class="dialog hidden">
+  <div class="dialog-box">
+    <h3>Full Value</h3>
+    <p id="popupText"></p>
+    <button onclick="closePopup()">Close</button>
+  </div>
+</div>
+
+<script>
+  let pressTimer;
+
+  function getMembers() {
+    return JSON.parse(localStorage.getItem("members")) || [];
+  }
+
+  function deleteMember(id) {
+    let members = getMembers();
+    members = members.filter(m => m.id !== id);
+    localStorage.setItem("members", JSON.stringify(members));
+    renderMembers();
+  }
+
+  function showPopup(text) {
+    document.getElementById("popupText").textContent = text;
+    document.getElementById("textPopup").classList.remove("hidden");
+  }
+
+  function closePopup() {
+    document.getElementById("textPopup").classList.add("hidden");
+  }
+
+  function attachLongPress(el, text) {
+    el.addEventListener("touchstart", () => {
+      pressTimer = setTimeout(() => showPopup(text), 500);
+    });
+
+    el.addEventListener("touchend", () => clearTimeout(pressTimer));
+    el.addEventListener("touchmove", () => clearTimeout(pressTimer));
+
+    el.addEventListener("mousedown", () => {
+      pressTimer = setTimeout(() => showPopup(text), 500);
+    });
+
+    el.addEventListener("mouseup", () => clearTimeout(pressTimer));
+    el.addEventListener("mouseleave", () => clearTimeout(pressTimer));
+  }
+
+  function renderMembers() {
+    const search = document.getElementById("search").value.toLowerCase();
+    const members = getMembers();
+    const table = document.getElementById("membersTable");
+    table.innerHTML = "";
+
+    members
+      .filter(m =>
+        m.name.toLowerCase().includes(search) ||
+        m.surname.toLowerCase().includes(search) ||
+        m.reference.toLowerCase().includes(search) ||
+        m.idNumber.includes(search)
+      )
+      .forEach(member => {
+        const row = document.createElement("tr");
+
+        const fields = [
+          member.name,
+          member.surname,
+          member.reference,
+          member.idNumber,
+          member.address
+        ];
+
+        fields.forEach(value => {
+          const td = document.createElement("td");
+          td.className = "truncate";
+          td.textContent = value;
+          attachLongPress(td, value);
+          row.appendChild(td);
+        });
+
+        const actionTd = document.createElement("td");
+        actionTd.innerHTML = `
+          <button class="danger" onclick="deleteMember(${member.id})">
+            Delete
+          </button>
+        `;
+        row.appendChild(actionTd);
+
+        table.appendChild(row);
+      });
+  }
+
+  function goToAdd() {
+    window.location.href = "add.html";
+  }
+
+  renderMembers();
+</script>
+
+</body>
+</html>

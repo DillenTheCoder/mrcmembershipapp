@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Locked</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Center the lock screen vertically and horizontally */
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+    
+    .lock-container {
+      width: 100%;
+      max-width: 400px;
+      padding: 40px 30px;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      text-align: center;
+    }
+    
+    /* PIN input specific styling */
+    #pinInput {
+      text-align: center;
+      font-size: 24px;
+      letter-spacing: 8px;
+      font-weight: 600;
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.08);
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      margin-bottom: 25px;
+      padding: 18px;
+    }
+    
+    #pinInput::placeholder {
+      letter-spacing: normal;
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 16px;
+    }
+    
+    /* Error message styling */
+    #error {
+      color: #ff6b6b;
+      text-align: center;
+      padding: 12px;
+      border-radius: 8px;
+      background: rgba(255, 107, 107, 0.1);
+      border: 1px solid rgba(255, 107, 107, 0.2);
+      margin-top: 15px;
+      animation: shake 0.5s ease;
+      display: none;
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+      .lock-container {
+        padding: 30px 20px;
+        margin: 20px;
+      }
+      
+      #pinInput {
+        font-size: 20px;
+        letter-spacing: 6px;
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="lock-container">
+    <h1>Enter PIN</h1>
+
+    <input
+      type="password"
+      id="pinInput"
+      placeholder="4-digit PIN"
+      inputmode="numeric"
+      maxlength="4"
+      autocomplete="off"
+      autofocus
+    />
+
+    <button onclick="unlock()">Unlock</button>
+
+    <p id="error">
+      Incorrect PIN
+    </p>
+  </div>
+
+<script>
+  // SET YOUR PIN HERE
+  const CORRECT_PIN = "0909";
+
+  function unlock() {
+    const pin = document.getElementById("pinInput").value;
+    const error = document.getElementById("error");
+
+    if (pin === CORRECT_PIN) {
+      // Add a success animation before redirecting
+      const container = document.querySelector('.lock-container');
+      container.style.transform = 'scale(0.95)';
+      container.style.opacity = '0.8';
+      
+      setTimeout(() => {
+        window.location.href = "add.html";
+      }, 300);
+      
+    } else {
+      // Show error with animation
+      error.style.display = 'block';
+      
+      // Shake animation effect
+      const container = document.querySelector('.lock-container');
+      container.style.animation = 'none';
+      setTimeout(() => {
+        container.style.animation = 'shake 0.5s ease';
+      }, 10);
+      
+      // Clear the input and refocus
+      document.getElementById("pinInput").value = '';
+      document.getElementById("pinInput").focus();
+      
+      // Hide error after 3 seconds
+      setTimeout(() => {
+        error.style.display = 'none';
+      }, 3000);
+    }
+  }
+  
+  // Add Enter key support
+  document.getElementById("pinInput").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      unlock();
+    }
+  });
+  
+  // Prevent form submission on Enter in the input field
+  document.getElementById("pinInput").addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+    }
+  });
+</script>
+
+</body>
+</html>

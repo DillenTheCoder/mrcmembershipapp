@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Add Member</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Member count in top-right */
+    #memberCount {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: #333;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body><br><br><br><br>
+
+  <div class="container">
+    <h1>Add Member</h1>
+
+    <!-- Member count -->
+    <div id="memberCount">Members: 0</div>
+
+    <form id="memberForm">
+      <input type="text" id="name" placeholder="Name" required />
+      <input type="text" id="surname" placeholder="Surname" required />
+      <input type="text" id="reference" placeholder="Reference" required />
+      <input type="text" id="idNumber" placeholder="ID Number" required />
+      <input type="text" id="address" placeholder="Address" required />
+
+      <button type="submit">Save Member</button>
+    </form>
+
+    <button class="secondary" onclick="goToView()">View Members</button>
+  </div>
+
+  <!-- Success Dialog -->
+  <div id="successDialog" class="dialog hidden">
+    <div class="dialog-box">
+      <h2>Success</h2>
+      <p>Member saved successfully.</p>
+      <button onclick="closeDialog()">OK</button>
+    </div>
+  </div>
+
+<script>
+  const form = document.getElementById("memberForm");
+  const dialog = document.getElementById("successDialog");
+  const memberCountDiv = document.getElementById("memberCount");
+
+  // Update member count
+  function updateMemberCount() {
+    const members = JSON.parse(localStorage.getItem("members")) || [];
+    memberCountDiv.textContent = `Members: ${members.length}`;
+  }
+
+  // Initialize count on page load
+  updateMemberCount();
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const member = {
+      id: Date.now(),
+      name: document.getElementById("name").value.trim(),
+      surname: document.getElementById("surname").value.trim(),
+      reference: document.getElementById("reference").value.trim(),
+      idNumber: document.getElementById("idNumber").value.trim(),
+      address: document.getElementById("address").value.trim()
+    };
+
+    const members = JSON.parse(localStorage.getItem("members")) || [];
+    members.push(member);
+    localStorage.setItem("members", JSON.stringify(members));
+
+    form.reset();
+    dialog.classList.remove("hidden");
+
+    // Update count after adding
+    updateMemberCount();
+  });
+
+  function closeDialog() {
+    dialog.classList.add("hidden");
+  }
+
+  function goToView() {
+    window.location.href = "view.html";
+  }
+</script>
+
+</body>
+</html>

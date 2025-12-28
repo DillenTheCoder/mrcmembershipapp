@@ -1,0 +1,126 @@
+/* Base reset */
+* {
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #111;
+  color: #fff;
+}
+
+/* Layout */
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Inputs & buttons */
+input,
+textarea,
+button {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  border: none;
+  font-size: 16px;
+}
+
+input,
+textarea {
+  background: #222;
+  color: #fff;
+}
+
+button {
+  background: #4caf50;
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button.secondary {
+  background: #333;
+  color: #fff;
+}
+
+button.danger {
+  background: #e53935;
+  color: #fff;
+}
+
+/* Table wrapper for horizontal scrolling */
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-top: 20px;
+}
+
+/* Table */
+table {
+  width: 100%;
+  min-width: 750px; /* forces horizontal scroll on mobile */
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  border: 1px solid #333;
+  padding: 10px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+th {
+  background: #222;
+}
+
+/* Truncated table cells */
+.truncate {
+  max-width: 140px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+/* Dialog / popup overlay */
+.dialog {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+/* Dialog box */
+.dialog-box {
+  background: #1c1c1c;
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  word-break: break-word;
+}
+
+.dialog-box h2,
+.dialog-box h3 {
+  margin-top: 0;
+}
+
+/* Hidden utility */
+.hidden {
+  display: none;
+}
